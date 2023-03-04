@@ -1,0 +1,44 @@
+version: '3'
+services:
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=your_password
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8741:80"
+    environment:
+      - PMA_ARBITRARY=1
+    depends_on:
+      - mysql
+    links:
+      - mysql
+
+  react-app:
+    build: ./Joke_bot
+    container_name: react-app
+    volumes:
+      - ./Joke_bot:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+
+  express-app:
+    build: ./api
+    restart: always
+    container_name: express-app
+    volumes:
+      - ./api:/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
