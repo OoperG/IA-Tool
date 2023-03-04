@@ -31,6 +31,7 @@ function Register() {
             .then((response) => {
                 console.log(response);
                 setError(false);
+                localStorage.setItem('username', username);
                 window.location = "/reformulation"
             })
             .catch((error) => {
