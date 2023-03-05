@@ -50,7 +50,6 @@ function Mail() {
             }
         })
             .then((res) => {
-                console.log(res.data.choices[0].text);
                 responseHandler(res);
             })
             .catch((e) => {
