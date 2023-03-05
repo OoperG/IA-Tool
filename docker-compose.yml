@@ -1,44 +1,61 @@
-version: '3'
+version: '3.8'
 services:
-  mysql:
+
+  db-data:
     image: mysql
-    container_name: mysql
+    container_name: db_docker
     restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=your_password
     volumes:
-      - ./mysql_data:/var/lib/mysql
+      - db-data:/var/lib/db-data
+    environment:
+      MYSQL_ROOT_PASSWORD: your_password
+    networks:
+      - dev
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin
     container_name: phpmyadmin
     restart: always
+    depends_on:
+      - db-data
     ports:
       - "8741:80"
     environment:
-      - PMA_ARBITRARY=1
-    depends_on:
-      - mysql
-    links:
-      - mysql
+      PMA_HOST: db-data
+      PMA_ARBITRARY: 1
+    networks:
+      - dev
 
-  react-app:
-    build: ./Joke_bot
-    container_name: react-app
-    volumes:
-      - ./Joke_bot:/app
+  react-ui:
+    build:
+      context: ./Joke_bot
     ports:
       - "3000:3000"
-    depends_on:
-      - mysql
+    container_name: react-ui
+    restart: always
+    stdin_open: true
+    volumes:
+      - ./Joke_bot:/usr/src/app/Joke_bot
+      - /usr/src/app/Joke_bot/node_modules
 
   express-app:
-    build: ./api
-    restart: always
-    container_name: express-app
-    volumes:
-      - ./api:/app
+    build:
+      context: ./api
     ports:
       - "8080:8080"
+    container_name: api
+    restart: always
+    stdin_open: true
+    volumes:
+      - ./api:/usr/src/app/api
+      - /usr/src/app/api/node_modules
     depends_on:
-      - mysql
+      - db-data
+    networks:
+      - dev
+
+networks:
+  dev:
+
+volumes:
+  db-data:

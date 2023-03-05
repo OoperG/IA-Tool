@@ -1,7 +1,7 @@
 const mysql = require('mysql2');
 
 const connections = mysql.createConnection({
-    host: 'mysql',
+    host: 'db-data',
     user: 'root',
     password: 'your_password'
 });
@@ -47,7 +47,7 @@ connections.connect((error) => {
 
 
 const connection = mysql.createConnection({
-    host: 'mysql',
+    host: 'db-data',
     user: 'root',
     password: 'your_password',
     database: 'iatools'

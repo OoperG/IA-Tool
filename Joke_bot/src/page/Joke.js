@@ -18,7 +18,7 @@ function Joke() {
     const [payload, setPayLoad] = useState({
         prompt: "Fait moi une blague sur ",
         temperature: 0.5,
-        max_tokens: 100,
+        max_tokens: 1000,
         n: 1,
         model: "text-davinci-003"
     });
