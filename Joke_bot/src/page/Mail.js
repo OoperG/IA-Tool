@@ -17,6 +17,7 @@ function Mail() {
     const [obj, setObj] = useState("");
     const [selectedValue, setSelectedValue] = useState('');
     const [destinataire, setDestinataire] = useState('');
+    const [auteur, setAuteur] = useState('');
     const [objet, setObjet] = useState('');
     const [payload, setPayLoad] = useState({
         prompt: "",
@@ -36,7 +37,7 @@ function Mail() {
 
     const getRes = () => {
         setLoading(true);
-        payload.prompt = "Rédige un email à " + selectedValue + " " + destinataire + " " + objet + " Détail : " + prompt;
+        payload.prompt = "Rédige un email de la part de " + auteur + " à destination de " + destinataire + " qui est un " + selectedValue + " pour : " + objet + " Détail : " + prompt;
         console.log(payload.prompt);
         axios({
             method: "POST",
@@ -84,6 +85,17 @@ function Mail() {
                                             <Form.Control
                                                 aria-describedby="basic-addon3"
                                                 onChange={(e) => setDestinataire(e.target.value)}
+                                            />
+                                        </InputGroup>
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                                        <InputGroup className="mb-3">
+                                            <InputGroup.Text id="basic-addon3">
+                                                Auteur :
+                                            </InputGroup.Text>
+                                            <Form.Control
+                                                aria-describedby="basic-addon3"
+                                                onChange={(e) => setAuteur(e.target.value)}
                                             />
                                         </InputGroup>
                                     </Form.Group>
