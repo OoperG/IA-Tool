@@ -66,22 +66,6 @@ function Reformulation() {
                                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                                     <Form.Label>Votre texte :</Form.Label>
                                     <Form.Control as="textarea" rows={5} onChange={(e) => setPrompt(e.target.value)} />
-                                    {/*<div key={`default-radio`} className="mb-3">
-                                        <Form.Check
-                                            inline
-                                            label="Friendly"
-                                            name="group1"
-                                            type="radio"
-                                            id={`inline-radio-1`}
-                                        />
-                                        <Form.Check
-                                            inline
-                                            label="Professional"
-                                            name="group1"
-                                            type="radio"
-                                            id={`inline-radio-2`}
-                                        />
-                                    </div>*/}
                                     {obj ?
                                         <div className="container d-flex justify-content-center">
                                             <div className="row">

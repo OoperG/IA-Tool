@@ -29,10 +29,16 @@ function Register() {
             }),
         })
             .then((response) => {
-                console.log(response);
-                setError(false);
-                localStorage.setItem('username', username);
-                window.location = "/reformulation"
+                if (response.status === 200) {
+                    console.log(response);
+                    setError(false);
+                    localStorage.setItem('username', username);
+                    window.location = "/reformulation"
+                } else {
+                    console.log(response);
+                    setError(true);
+                    setErrorMessage("Error: " + response.statusText + " " + response.status);
+                }
             })
             .catch((error) => {
                 console.error("Error:", error);

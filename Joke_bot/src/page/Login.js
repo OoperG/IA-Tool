@@ -27,12 +27,16 @@ function Login() {
             }),
         })
             .then((response) => {
-                console.log(response);
-                localStorage.setItem('username', username);
-                setError(false);
-                window.location = "/reformulation"
-                //console.log("go to login");
-                //window.location = "/";
+                if (response.status === 200) {
+                    console.log(response);
+                    setError(false);
+                    localStorage.setItem('username', username);
+                    window.location = "/reformulation"
+                } else {
+                    console.log(response);
+                    setError(true);
+                    setErrorMessage("Error: " + response.statusText + " " + response.status);
+                }
             })
             .catch((error) => {
                 console.error("Error:", error);
