@@ -76,7 +76,7 @@ function Register() {
                                 Submit
                             </Button>
                             {error ? <Form.Group className="mb-3" controlId="formBasicPassword">
-                                <Form.Label>{}</Form.Label>
+                                <Form.Label>{errorMessage}</Form.Label>
                             </Form.Group> : null}
                         </Form>
                     </Card.Body>

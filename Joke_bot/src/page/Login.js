@@ -72,7 +72,7 @@ function Login() {
                         </Form.Group>
                         {error ?
                             <Form.Group className="mb-3" controlId="formBasicPassword">
-                                <Form.Label>{error}</Form.Label>
+                                <Form.Label>{errorMessage}</Form.Label>
                             </Form.Group>
                             : null}
                     </Form>
