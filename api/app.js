@@ -6,69 +6,71 @@ const connections = mysql.createConnection({
     password: 'your_password'
 });
 
-connections.connect((error) => {
-    if (error) {
-        console.error('Error connecting to the database: ' + error.stack);
-        return;
-    }
-    console.log('Connected to the database with thread ID ' + connection.threadId);
-    // création de la base de données iatools si elle n'existe pas
-    connections.query('CREATE DATABASE IF NOT EXISTS iatools', (error, result) => {
+function create_database() {
+    connections.connect((error) => {
         if (error) {
-            console.error('Error creating the database: ' + error.stack);
-            return;
+            console.error('Error connecting to the database: ' + error.stack);
+            setTimeout(create_database, 5000); // retry after 5 seconds
         }
-        console.log('Database iatools created');
-    });
-    // utilisation de la base de données iatools
-    connections.query('USE iatools', (error, result) => {
-        if (error) {
-            console.error('Error using the database: ' + error.stack);
-            return;
-        }
-        console.log('Using database iatools');
-    });
-    // création de la table users si elle n'existe pas
-    connections.query(`CREATE TABLE IF NOT EXISTS users (
-        user_id INT PRIMARY KEY AUTO_INCREMENT,
-        user_name VARCHAR(255) NOT NULL,
-        password VARCHAR(255) NOT NULL,
-        email VARCHAR(255) NOT NULL,
-        sign_up_date DATETIME NOT NULL,
-        is_connected TINYINT NOT NULL
-    )`, (error, result) => {
-        if (error) {
-            console.error('Error creating the users table: ' + error.stack);
-            return;
-        }
-        console.log('Table users created');
-    });
-    connections.query(`CREATE TABLE IF NOT EXISTS users_data (
-        user_name VARCHAR(255) NOT NULL,
-        user_mail TEXT NOT NULL,
-        date_creation DATETIME NOT NULL
-    )`, (error, result) => {
-        if (error) {
-            console.error('Error creating the users_data table: ' + error.stack);
-            return;
-        }
-        console.log('Table users_data created');
-    });
-});
+        console.log('Connected to the database with thread ID ' + connections.threadId);
+        // création de la base de données iatools si elle n'existe pas
+        connections.query('CREATE DATABASE IF NOT EXISTS iatools', (error, result) => {
+            if (error) {
+                console.error('Error creating the database: ' + error.stack);
+                return;
+            }
+            console.log('Database iatools created');
 
-const connection = mysql.createConnection({
-    host: 'db-data',
-    user: 'root',
-    password: 'your_password',
-    database: 'iatools'
-});
-connection.connect((error) => {
-    if (error) {
-        console.error('Error connecting to the database: ' + error.stack);
-        return;
-    }
-    console.log('Connected to the database with thread ID ' + connection.threadId);
-});
+            // utilisation de la base de données iatools
+            const connection = mysql.createConnection({
+                host: 'db-data',
+                user: 'root',
+                password: 'your_password',
+                database: 'iatools'
+            });
+
+            connection.connect((error) => {
+                if (error) {
+                    console.error('Error connecting to the database: ' + error.stack);
+                    setTimeout(connectToDatabase, 5000); // retry after 5 seconds
+                } else {
+                    console.log('Connected to the database with thread ID ' + connection.threadId);
+
+                    // création de la table users si elle n'existe pas
+                    connection.query(`CREATE TABLE IF NOT EXISTS users (
+                                                                           user_id INT PRIMARY KEY AUTO_INCREMENT,
+                                                                           user_name VARCHAR(255) NOT NULL,
+                        password VARCHAR(255) NOT NULL,
+                        email VARCHAR(255) NOT NULL,
+                        sign_up_date DATETIME NOT NULL,
+                        is_connected TINYINT NOT NULL
+                        )`, (error, result) => {
+                        if (error) {
+                            console.error('Error creating the users table: ' + error.stack);
+                            return;
+                        }
+                        console.log('Table users created');
+                    });
+
+                    connection.query(`CREATE TABLE IF NOT EXISTS users_data (
+                        user_name VARCHAR(255) NOT NULL,
+                        user_mail TEXT NOT NULL,
+                        date_creation DATETIME NOT NULL
+                        )`, (error, result) => {
+                        if (error) {
+                            console.error('Error creating the users_data table: ' + error.stack);
+                            return;
+                        }
+                        console.log('Table users_data created');
+                    });
+                }
+            });
+        });
+    });
+}
+
+create_database();
+
 
 const express = require('express');
 const cors = require('cors');
