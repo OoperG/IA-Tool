@@ -13,6 +13,7 @@ function Mail() {
     const apiKey = process.env.REACT_APP_API_KEY;
 
     const [prompt, setPrompt] = useState("");
+    const [username, setUsername] = useState(localStorage.getItem('username') || '');
     const [loading, setLoading] = useState(false);
     const [obj, setObj] = useState("");
     const [selectedValue, setSelectedValue] = useState('');
@@ -30,6 +31,10 @@ function Mail() {
     useEffect(() => {
         console.log(selectedValue);
     }, [selectedValue]);
+
+    useEffect(() => {
+        console.log("valeur de " + obj);
+    }, [obj]);
 
     const handleRadioChange = (event) => {
         setSelectedValue(event.target.value);
@@ -62,7 +67,32 @@ function Mail() {
         if (res.status === 200) {
             setObj(res.data.choices[0].text);
             setLoading(false);
+            post_mail(); // Appel de la fonction post_mail ici
         }
+    }
+
+    const post_mail = () => {
+        console.log("Send to API :", username, obj);
+        fetch("http://localhost:8080/post_mail", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                user_name: username,
+                user_mail: obj,
+            }),
+        })
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log(response);
+                } else {
+                    console.log(response);
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
     };
 
     return (
@@ -127,7 +157,8 @@ function Mail() {
                                     </Form>
                                     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                                         <Form.Label>Rapide detail de la demande :</Form.Label>
-                                        <Form.Control as="textarea" rows={5} onChange={(e) => setPrompt(e.target.value)} />
+                                        <Form.Control as="textarea" rows={5}
+                                                      onChange={(e) => setPrompt(e.target.value)}/>
                                     </Form.Group>
 
                                     {/*<Form.Control as="textarea" rows={5} onChange={(e) => setPrompt(e.target.value)}/>*/}
@@ -136,7 +167,7 @@ function Mail() {
                                             <div className="row">
                                                 <div className="col">
                                                     <Form.Group className="mb-3">
-                                                        <Form.Label style={{ whiteSpace: "pre-wrap" }}>{obj}</Form.Label>
+                                                        <Form.Label style={{whiteSpace: "pre-wrap"}}>{obj}</Form.Label>
                                                     </Form.Group>
                                                 </div>
                                             </div>

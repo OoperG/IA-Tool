@@ -45,14 +45,14 @@ connections.connect((error) => {
     });
     connections.query(`CREATE TABLE IF NOT EXISTS users_data (
         user_name VARCHAR(255) NOT NULL,
-        user_mail VARCHAR(255) NOT NULL,
+        user_mail TEXT NOT NULL,
         date_creation DATETIME NOT NULL
     )`, (error, result) => {
         if (error) {
-            console.error('Error creating the user_data table: ' + error.stack);
+            console.error('Error creating the users_data table: ' + error.stack);
             return;
         }
-        console.log('Table user_data created');
+        console.log('Table users_data created');
     });
 });
 
@@ -130,7 +130,28 @@ app.post('/login', (req, res) => {
     });
 });
 
+app.post('/post_mail', (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    const { user_name, user_mail } = req.body;
+    connection.query('INSERT INTO users_data (user_name, user_mail, date_creation) VALUES (?, ?, NOW())', [user_name, user_mail], (error, result) => {
+        if (error) {
+            res.status(500).send('Error adding mail to database');
+            return;
+        }
+        res.status(200).send('Mail added to database');
+    });
+});
 
+app.get('/get_mail', (req, res) => {
+    connection.query('SELECT * FROM users_data', (error, results) => {
+        if (error) {
+            res.status(500).send('Error retrieving mails from database');
+            return;
+        }
+        res.status(200).json(results);
+        console.log(results);
+    });
+});
 app.listen(port, () => {
     console.log(`Serveur démarré sur le port ${port}`);
 });
