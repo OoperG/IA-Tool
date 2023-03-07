@@ -43,8 +43,18 @@ connections.connect((error) => {
         }
         console.log('Table users created');
     });
+    connections.query(`CREATE TABLE IF NOT EXISTS users_data (
+        user_name VARCHAR(255) NOT NULL,
+        user_mail VARCHAR(255) NOT NULL,
+        date_creation DATETIME NOT NULL
+    )`, (error, result) => {
+        if (error) {
+            console.error('Error creating the user_data table: ' + error.stack);
+            return;
+        }
+        console.log('Table user_data created');
+    });
 });
-
 
 const connection = mysql.createConnection({
     host: 'db-data',
@@ -52,7 +62,6 @@ const connection = mysql.createConnection({
     password: 'your_password',
     database: 'iatools'
 });
-
 connection.connect((error) => {
     if (error) {
         console.error('Error connecting to the database: ' + error.stack);

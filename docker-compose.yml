@@ -1,14 +1,13 @@
 version: '3.8'
 services:
-
   db-data:
     image: mysql
     container_name: db_docker
     restart: always
-    volumes:
-      - db-data:/var/lib/db-data
     environment:
       MYSQL_ROOT_PASSWORD: your_password
+    volumes:
+      - db-data:/var/lib/mysql
     networks:
       - dev
 
