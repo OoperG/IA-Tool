@@ -6,6 +6,13 @@ const connections = mysql.createConnection({
     password: 'your_password'
 });
 
+const connection = mysql.createConnection({
+    host: 'db-data',
+    user: 'root',
+    password: 'your_password',
+    database: 'iatools'
+});
+
 function create_database() {
     connections.connect((error) => {
         if (error) {
@@ -20,14 +27,6 @@ function create_database() {
                 return;
             }
             console.log('Database iatools created');
-
-            // utilisation de la base de données iatools
-            const connection = mysql.createConnection({
-                host: 'db-data',
-                user: 'root',
-                password: 'your_password',
-                database: 'iatools'
-            });
 
             connection.connect((error) => {
                 if (error) {
