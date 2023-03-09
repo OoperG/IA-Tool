@@ -55,40 +55,27 @@ function Field() {
     return (
         <div>
             <Navigation/>
-            {/*userMails.map((mail, index) => (
-                <p style={{whiteSpace: "pre-wrap"}} key={index}>{mail} {mailObjects[index]}</p>
-            ))*/}
-            <div className="containers mt-5">
+            <div className="containers">
                 <div className="row">
                     {mailObjects.map((object, index) => (
-                        <>
-                            <div className="col">
-                                <Card style={{width: '18rem'}}>
-                                    <Card.Body>
-                                        <Card.Subtitle className="mb-2 text-muted">Objet du Mail :</Card.Subtitle>
-                                        <Card.Title>{object}</Card.Title>
-                                        {/*<Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>*/}
-                                        <Card.Subtitle className="mb-2 text-muted">Destinataire :</Card.Subtitle>
-                                        <Card.Title>{mail_destinataire[index]}</Card.Title>
-                                        {/*<Button
-                                            variant="primary"
-                                            onClick={() => setModal(true)}
-                                        >View Mail</Button>*/}
-                                        <Accordion>
-                                            <Accordion.Item eventKey="0">
-                                                <Accordion.Header>View mail</Accordion.Header>
-                                                <Accordion.Body style={{whiteSpace: "pre-wrap"}}>
-                                                    {userMails[index]}
-                                                </Accordion.Body>
-                                            </Accordion.Item>
-                                        </Accordion>
-                                    </Card.Body>
-                                </Card>
-                            </div>
-                        </>
+                        <div className="col">
+                            <Card style={{width: '25rem'}}>
+                                <Card.Body>
+                                    <Card.Subtitle className="mb-2 text-muted">Objet du Mail :</Card.Subtitle>
+                                    <Card.Title>{object}</Card.Title>
+                                    <Card.Subtitle className="mb-2 text-muted">Destinataire :</Card.Subtitle>
+                                    <Card.Title>{mail_destinataire[index]}</Card.Title>
+                                    <Accordion>
+                                        <Accordion.Item eventKey="0">
+                                            <Accordion.Header>View mail</Accordion.Header>
+                                            <Accordion.Body style={{whiteSpace: "pre-wrap"}}>
+                                                {userMails[index]}
+                                            </Accordion.Body>
+                                        </Accordion.Item>
+                                    </Accordion>
+                                </Card.Body>
+                            </Card>
+                        </div>
                     ))}
                 </div>
             </div>

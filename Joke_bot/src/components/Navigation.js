@@ -1,5 +1,4 @@
 import {Container, Nav, Navbar} from "react-bootstrap";
-import { AuthContext } from './AuthContext';
 import {useContext, useEffect, useState} from 'react';
 import "../App.css"
 
