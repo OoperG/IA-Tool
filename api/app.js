@@ -51,9 +51,11 @@ function create_database() {
                     });
 
                     connection.query(`CREATE TABLE IF NOT EXISTS users_data (
+                        mail_id INT PRIMARY KEY AUTO_INCREMENT,
                         user_name VARCHAR(255) NOT NULL,
                         user_mail TEXT NOT NULL,
                         mail_object TEXT NOT NULL,
+                        mail_destinataire TEXT NOT NULL,
                         date_creation DATETIME NOT NULL
                         )`, (error, result) => {
                         if (error) {
@@ -139,8 +141,8 @@ app.post('/login', (req, res) => {
 
 app.post('/post_mail', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
-    const { user_name, user_mail, mail_object } = req.body;
-    connection.query('INSERT INTO users_data (user_name, user_mail, mail_object, date_creation) VALUES (?, ?, ?, NOW())', [user_name, user_mail, mail_object], (error, result) => {
+    const { user_name, user_mail, mail_object, mail_destinataire } = req.body;
+    connection.query('INSERT INTO users_data (user_name, user_mail, mail_object, mail_destinataire, date_creation) VALUES (?, ?, ?, ?, NOW())', [user_name, user_mail, mail_object, mail_destinataire], (error, result) => {
         if (error) {
             res.status(500).send('Error adding mail to database');
             return;
@@ -162,7 +164,7 @@ app.get('/get_mail', (req, res) => {
 
 app.post('/user_mail', (req, res) => {
     const username = req.body.user_name;
-    connection.query(`SELECT user_mail, mail_object FROM users_data WHERE user_name = '${username}'`, (error, results, fields) => {
+    connection.query(`SELECT user_mail, mail_object, mail_destinataire FROM users_data WHERE user_name = '${username}'`, (error, results, fields) => {
         if (error) {
             console.log(error);
             res.status(500).send('Error retrieving mails from database');

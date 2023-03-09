@@ -81,6 +81,7 @@ function Mail() {
                 user_name: username,
                 user_mail: obj,
                 mail_object: objet,
+                mail_destinataire: destinataire,
             }),
         })
             .then((response) => {
