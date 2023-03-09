@@ -67,7 +67,6 @@ function Mail() {
         if (res.status === 200) {
             setObj(res.data.choices[0].text);
             setLoading(false);
-            post_mail(); // Appel de la fonction post_mail ici
         }
     }
 
@@ -81,6 +80,7 @@ function Mail() {
             body: JSON.stringify({
                 user_name: username,
                 user_mail: obj,
+                mail_object: objet,
             }),
         })
             .then((response) => {
@@ -168,6 +168,11 @@ function Mail() {
                                                 <div className="col">
                                                     <Form.Group className="mb-3">
                                                         <Form.Label style={{whiteSpace: "pre-wrap"}}>{obj}</Form.Label>
+                                                    </Form.Group>
+                                                    <Form.Group className="mb-3">
+                                                        <Button variant="success" type="submit" onClick={post_mail}>
+                                                            Save Mail
+                                                        </Button>
                                                     </Form.Group>
                                                 </div>
                                             </div>

@@ -20,9 +20,9 @@ function Navigation() {
     return (
         <Navbar bg="dark" variant="dark">
             <Container>
-                <Navbar.Brand href="/">IA Tools</Navbar.Brand>
+                <Navbar.Brand>IA Tools</Navbar.Brand>
                 <Nav className="me-auto">
-                    <Nav.Link href="/joke">Joke</Nav.Link>
+                    <Nav.Link href="/field">Field</Nav.Link>
                     <Nav.Link href="/mail">Mail</Nav.Link>
                     <Nav.Link href="/reformulation">Reformulation</Nav.Link>
                 </Nav>

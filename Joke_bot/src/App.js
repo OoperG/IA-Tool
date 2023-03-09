@@ -7,6 +7,7 @@ import Reformulation from "./page/Reformulation";
 import {AuthProvider} from './components/AuthContext';
 import Login from "./page/Login";
 import Register from "./page/Register";
+import Field from "./page/Field";
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
                     <Route path="/mail" element={<Mail/>}/>
                     <Route path="/reformulation" element={<Reformulation/>}/>
                     <Route path="/register" element={<Register/>}/>
+                    <Route path="/field" element={<Field/>}/>
                 </Routes>
             </BrowserRouter>
         </AuthProvider>

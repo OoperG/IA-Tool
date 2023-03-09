@@ -6,13 +6,6 @@ const connections = mysql.createConnection({
     password: 'your_password'
 });
 
-const connection = mysql.createConnection({
-    host: 'db-data',
-    user: 'root',
-    password: 'your_password',
-    database: 'iatools'
-});
-
 function create_database() {
     connections.connect((error) => {
         if (error) {
@@ -27,13 +20,19 @@ function create_database() {
                 return;
             }
             console.log('Database iatools created');
+            const connection = mysql.createConnection({
+                host: 'db-data',
+                user: 'root',
+                password: 'your_password',
+                database: 'iatools'
+            });
 
             connection.connect((error) => {
                 if (error) {
-                    console.error('Error connecting to the database: ' + error.stack);
-                    setTimeout(connectToDatabase, 5000); // retry after 5 seconds
+                    console.error('Error connecting to the iatools database: ' + error.stack);
+                    setTimeout(create_database, 5000); // retry after 5 seconds
                 } else {
-                    console.log('Connected to the database with thread ID ' + connection.threadId);
+                    console.log('Connected to the iatools database with thread ID ' + connection.threadId);
 
                     // création de la table users si elle n'existe pas
                     connection.query(`CREATE TABLE IF NOT EXISTS users (
@@ -54,6 +53,7 @@ function create_database() {
                     connection.query(`CREATE TABLE IF NOT EXISTS users_data (
                         user_name VARCHAR(255) NOT NULL,
                         user_mail TEXT NOT NULL,
+                        mail_object TEXT NOT NULL,
                         date_creation DATETIME NOT NULL
                         )`, (error, result) => {
                         if (error) {
@@ -69,7 +69,6 @@ function create_database() {
 }
 
 create_database();
-
 
 const express = require('express');
 const cors = require('cors');
@@ -88,6 +87,13 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+const connection = mysql.createConnection({
+    host: 'db-data',
+    user: 'root',
+    password: 'your_password',
+    database: 'iatools'
+});
 
 // Route pour récupérer tous les utilisateurs
 app.get('/users', (req, res) => {
@@ -133,8 +139,8 @@ app.post('/login', (req, res) => {
 
 app.post('/post_mail', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
-    const { user_name, user_mail } = req.body;
-    connection.query('INSERT INTO users_data (user_name, user_mail, date_creation) VALUES (?, ?, NOW())', [user_name, user_mail], (error, result) => {
+    const { user_name, user_mail, mail_object } = req.body;
+    connection.query('INSERT INTO users_data (user_name, user_mail, mail_object, date_creation) VALUES (?, ?, ?, NOW())', [user_name, user_mail, mail_object], (error, result) => {
         if (error) {
             res.status(500).send('Error adding mail to database');
             return;
@@ -151,6 +157,19 @@ app.get('/get_mail', (req, res) => {
         }
         res.status(200).json(results);
         console.log(results);
+    });
+});
+
+app.post('/user_mail', (req, res) => {
+    const username = req.body.user_name;
+    connection.query(`SELECT user_mail, mail_object FROM users_data WHERE user_name = '${username}'`, (error, results, fields) => {
+        if (error) {
+            console.log(error);
+            res.status(500).send('Error retrieving mails from database');
+            return;
+        }
+        console.log(results);
+        res.status(200).json(results);
     });
 });
 app.listen(port, () => {
