@@ -64,6 +64,18 @@ function create_database() {
                         }
                         console.log('Table users_data created');
                     });
+                    connection.query(`CREATE TABLE IF NOT EXISTS users_form (
+                        form_id INT PRIMARY KEY AUTO_INCREMENT,
+                        user_name VARCHAR(255) NOT NULL,
+                        user_form TEXT NOT NULL,
+                        date_creation DATETIME NOT NULL
+                        )`, (error, result) => {
+                        if (error) {
+                            console.error('Error creating the users_form table: ' + error.stack);
+                            return;
+                        }
+                        console.log('Table users_form created');
+                    });
                 }
             });
         });
@@ -168,6 +180,31 @@ app.post('/user_mail', (req, res) => {
         if (error) {
             console.log(error);
             res.status(500).send('Error retrieving mails from database');
+            return;
+        }
+        console.log(results);
+        res.status(200).json(results);
+    });
+});
+
+app.post('/post_form', (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    const { user_name, user_form} = req.body;
+    connection.query('INSERT INTO users_form (user_name, user_form, date_creation) VALUES (?, ?, NOW())', [user_name, user_form], (error, result) => {
+        if (error) {
+            res.status(500).send('Error adding form to database');
+            return;
+        }
+        res.status(200).send('Form added to database');
+    });
+});
+
+app.post('/user_form', (req, res) => {
+    const username = req.body.user_name;
+    connection.query(`SELECT user_form FROM users_form WHERE user_name = '${username}'`, (error, results, fields) => {
+        if (error) {
+            console.log(error);
+            res.status(500).send('Error retrieving form from database');
             return;
         }
         console.log(results);

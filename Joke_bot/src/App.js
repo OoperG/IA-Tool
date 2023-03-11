@@ -8,6 +8,8 @@ import {AuthProvider} from './components/AuthContext';
 import Login from "./page/Login";
 import Register from "./page/Register";
 import Field from "./page/Field";
+import Mail_field from "./page/Mail_field";
+import Form_field from "./page/Form_field";
 
 function App() {
 
@@ -21,6 +23,8 @@ function App() {
                     <Route path="/reformulation" element={<Reformulation/>}/>
                     <Route path="/register" element={<Register/>}/>
                     <Route path="/field" element={<Field/>}/>
+                    <Route path="/mail_field" element={<Mail_field/>}/>
+                    <Route path="/form_field" element={<Form_field/>}/>
                 </Routes>
             </BrowserRouter>
         </AuthProvider>

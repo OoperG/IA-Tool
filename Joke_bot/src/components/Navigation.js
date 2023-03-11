@@ -24,6 +24,7 @@ function Navigation() {
                     <Nav.Link href="/field">Field</Nav.Link>
                     <Nav.Link href="/mail">Mail</Nav.Link>
                     <Nav.Link href="/reformulation">Reformulation</Nav.Link>
+                    <Nav.Link href="/joke">Joke</Nav.Link>
                 </Nav>
                 <Navbar.Collapse className="justify-content-end">
                     <Navbar.Text>

@@ -13,6 +13,8 @@ function Reformulation() {
     const { apiKey } = useContext(AuthContext);
     const [obj, setObj] = useState("");
     const [prompt, setPrompt] = useState("");
+    const [username, setUsername] = useState(localStorage.getItem('username') || '');
+
 
     //const apiKey = process.env.REACT_APP_API_KEY;
     const [payload, setPayLoad] = useState({
@@ -47,6 +49,30 @@ function Reformulation() {
             });
     };
 
+    const post_form = () => {
+        console.log("Send to API :", username, obj);
+        fetch("http://localhost:8080/post_form", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                user_name: username,
+                user_form: obj,
+            }),
+        })
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log(response);
+                } else {
+                    console.log(response);
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    };
+
     const responseHandler = (res) => {
         if (res.status === 200) {
             setObj(res.data.choices[0].text);
@@ -72,6 +98,11 @@ function Reformulation() {
                                                 <div className="col">
                                                     <Form.Group className="mb-3">
                                                         <Form.Label>{obj}</Form.Label>
+                                                    </Form.Group>
+                                                    <Form.Group className="mb-3">
+                                                        <Button variant="success" type="submit" onClick={post_form}>
+                                                            save
+                                                        </Button>
                                                     </Form.Group>
                                                 </div>
                                             </div>
